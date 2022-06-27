@@ -62,7 +62,7 @@ export default function Index() {
   const { posts } = useLoaderData<LoaderData>();
   const formData = useActionData<ActionData>();
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-8">
       <h1 className="text-xl">Remix Social</h1>
       <PostForm
         action="/?index"
@@ -72,7 +72,9 @@ export default function Index() {
       <ul>
         {posts.map((post) => (
           <li key={post.title}>
-            <Post header={post.title}>{post.body}</Post>
+            <Post header={post.title} authorName={post.author?.email}>
+              {post.body}
+            </Post>
           </li>
         ))}
       </ul>
