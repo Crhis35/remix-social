@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '../Button';
 import type { Props } from './types';
 
 const PostForm = ({ method = 'post', fields, error, ...props }: Props) => {
@@ -33,12 +34,9 @@ const PostForm = ({ method = 'post', fields, error, ...props }: Props) => {
           <p className="text-red-500">{error?.fieldErrors?.body}</p>
         )}
       </div>
-      <button
-        type="submit"
-        className="transition rounded text-blue-700 font-bold py-4 px-6 transparent hover:bg-gray-100"
-      >
-        Create Post
-      </button>
+      <Button type="submit" className="border border-blue-500">
+        Create post
+      </Button>
     </form>
   );
 };

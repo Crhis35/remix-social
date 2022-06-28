@@ -4,8 +4,9 @@ import { json } from '@remix-run/node';
 import { useActionData, useLoaderData } from '@remix-run/react';
 import { Post } from '~/components/Post';
 import { PostForm } from '~/components/PostForm';
+import { authenticator } from '~/services/auth.server';
 import { getPost, createPost } from '~/services/posts.server';
-import { CreatePost } from '~/services/validation';
+import { CreatePost } from '~/services/validations';
 
 type LoaderData = {
   posts: Awaited<ReturnType<typeof getPost>>;
@@ -25,6 +26,9 @@ type ActionData = {
 };
 
 export const action: ActionFunction = async ({ request }) => {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  });
   const form = await request.formData();
   const rawTitle = form.get('title');
   const rawBody = form.get('body');
@@ -49,11 +53,15 @@ export const action: ActionFunction = async ({ request }) => {
   await createPost({
     title: result.data.title || null,
     body: result.data.body,
+    authorId: user.id,
   });
   return redirect('/');
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  });
   const posts = await getPost();
   return json({ posts });
 };

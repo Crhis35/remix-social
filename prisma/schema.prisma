@@ -19,7 +19,7 @@ model Post {
   body  String
 
   createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
 }
@@ -27,11 +27,11 @@ model Post {
 model User {
   id             String  @id @default(uuid())
   name           String?
-  email          String
+  email          String  @unique
   hashedPassword String
   role           String  @default("USER")
   posts          Post[]
 
   createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }
